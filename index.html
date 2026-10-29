@@ -1,0 +1,8 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; connect-src 'none'"><title>바루랩 주문 연결</title><style>body{font:16px/1.6 system-ui,sans-serif;color:#17304d;max-width:580px;margin:12vh auto;padding:24px}h1{font-size:24px}textarea{width:100%;min-height:110px;box-sizing:border-box}small{color:#53637a}button{padding:12px 18px}</style></head><body><h1>바루랩 주문 연결</h1><p id="status">인증 결과를 확인하고 있습니다.</p><div id="fallback" hidden><p>운영보드의 주문 연결 창에 아래 일회용 값을 붙여넣어 주세요.</p><textarea id="result" readonly aria-label="일회용 연결 결과"></textarea><small>이 값은 곧 만료됩니다. 비밀번호나 API 비밀키가 아닙니다.</small></div><script>
+(()=>{'use strict';const p=new URLSearchParams(location.search);history.replaceState(null,'',location.pathname);const status=document.getElementById('status');
+const code=p.get('code'),state=p.get('state');if(p.get('error')||!code||!state||code.length>2048||!/^[A-Za-z0-9_-]{32,100}$/.test(state)){status.textContent='인증 결과가 없거나 승인이 취소됐습니다. PC 운영보드에서 연결을 다시 시작해 주세요.';return;}
+const result={type:'barulab-cafe24-oauth',code,state};if(window.opener){window.opener.postMessage(result,'http://127.0.0.1:8770');status.textContent='인증 결과를 PC 운영보드로 전달했습니다. 연결 완료 여부는 운영보드에서 확인해 주세요.';}
+else{status.textContent='PC 운영보드 창과 자동 연결되지 않았습니다.';document.getElementById('fallback').hidden=false;document.getElementById('result').value=JSON.stringify(result);}
+})();
+</script></body></html>
+
